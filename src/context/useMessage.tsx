@@ -6,9 +6,11 @@ type messageType = {
     text: string;
 } | null
 export type messageContextType = {
+    pageLoading: boolean;
     isLoading: boolean;
     message: messageType;
     setMessage: Dispatch<SetStateAction<messageType>>;
+    setPageLoading: Dispatch<SetStateAction<boolean>>;
     setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -16,11 +18,14 @@ export const MessageContext = createContext<messageContextType | null>(null)
 
 export function MessageContextProvider({ children }: { children: ReactNode }) {
     const [message, setMessage] = useState<messageType>(null)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [pageLoading, setPageLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState(false);
     const contextValue = {
         message,
+        pageLoading,
         isLoading,
         setIsLoading,
+        setPageLoading,
         setMessage
     }
     return (

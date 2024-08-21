@@ -14,14 +14,15 @@ export default function ELink({
     href: string;
     className?: string
 }) {
-    const { setIsLoading } = useMessage()
+    const { setPageLoading, setMessage } = useMessage()
     const router = useRouter()
     const handleMouse = (e: MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault()
-        setIsLoading(true)
+        setMessage(null)
+        setPageLoading(true)
         router.push(href)
         setTimeout(() => {
-            setIsLoading(false)
+            setPageLoading(false)
         }, 500)
     }
     return (

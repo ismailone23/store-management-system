@@ -1,7 +1,15 @@
+'use client'
+import { signOut, useSession } from 'next-auth/react'
 import React from 'react'
 
-export default function page() {
+export default function Page() {
+    const session = useSession();
     return (
-        <div>page</div>
+        <div>
+            <div>
+                {JSON.stringify(session)}
+            </div>
+            <button onClick={() => signOut()} >signout</button>
+        </div>
     )
 }

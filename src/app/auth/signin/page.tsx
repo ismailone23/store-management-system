@@ -1,36 +1,64 @@
 'use client'
-import Button from '@/components/shared/Button'
+import SignInForm from '@/components/auth/sign-inform'
+import Top from '@/components/auth/Top'
 import ELink from '@/components/shared/ELink'
-import ErrorDiv from '@/components/shared/ErrorDiv'
-import Input from '@/components/shared/Input'
 import useMessage from '@/context/useMessage'
+import { getUserByEmail } from '@/lib/utils/actions'
+import { logintype } from '@/types'
+import { compare } from 'bcryptjs'
+import { signIn } from 'next-auth/react'
+import { FormEvent, useRef } from 'react'
 
 export default function Page() {
-    const { message } = useMessage()
+    const { setMessage, setIsLoading } = useMessage();
+    const formref = useRef<HTMLFormElement | null>(null)
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setMessage(null)
+        setIsLoading(true)
+        setIsLoading(false)
+        const formdata = new FormData(formref.current as HTMLFormElement)
+        const { email, password } = Object.fromEntries(formdata) as logintype
+        if (!email || !password) {
+            setIsLoading(false)
+            setMessage({ error: true, text: "Fill all the fields carefully" })
+            return
+        } else if (password.length < 6) {
+            setIsLoading(false)
+            setMessage({ error: true, text: "password must be greater than 6 charecter" })
+            return
+        }
+        const user = await getUserByEmail(email)
+        if (!user) {
+            setIsLoading(false)
+            setMessage({ error: true, text: "Invalid Credentials" })
+            return
+        }
+        const passcheck = await compare(password, user.password)
+        if (!passcheck) {
+            setIsLoading(false)
+            setMessage({ error: true, text: "Invalid Credentials" })
+            return
+        }
+        if (!user.isapproved) {
+            setIsLoading(false)
+            setMessage({ error: true, text: "Your account is not approved yet" })
+            return
+        }
+        await signIn('credentials', { ...user }).then(() => {
+            setIsLoading(false)
+            formref.current?.reset()
+        }).catch((error) => {
+            setIsLoading(false)
+            setMessage({ error: true, text: error })
+        })
+    }
     return (
         <div className='w-full flex items-center p-2 h-screen overflow-y-auto overflow-x-hidden justify-center'>
-            <div className="w-full border gap-5 rounded border-gray-100 max-w-[450px] py-4 px-2 flex flex-col">
-                <h1 className='text-center'>SigIn Option</h1>
-                <form className='flex flex-col gap-2'>
-                    <Input
-                        title='Email'
-                        name='email'
-                        type='email'
-                        placeholder='test@example.com'
-                    />
-                    <Input
-                        title='Password'
-                        name='password'
-                        type='password'
-                        placeholder='******'
-                    />
-                    <Button
-                        className='bg-gray-800 py-1 rounded-sm text-white'
-                        title='Sign In'
-                        type='submit'
-                    />
-                    {message && <ErrorDiv />}
-                </form>
+            <div className="w-full border gap-5 rounded border-gray-100 max-w-[400px] p-4 flex flex-col">
+                <Top title='SigIn Option' />
+                <SignInForm formref={formref} handleSubmit={handleSubmit} />
                 <ELink className='underline' href='/auth/register' title={`Don't Have an Account?`} />
             </div>
         </div>

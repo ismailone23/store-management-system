@@ -18,6 +18,9 @@ export default function Button({
     iconClas?: string;
 }) {
     return (
-        <button onClick={onClick} className={className} type={type}>{Icon && <Icon className={iconClas} />}{title}</button>
+        <button disabled={disabled} onClick={onClick} className={className} type={type}>
+            {Icon && <Icon className={iconClas} />}
+            {title}
+        </button>
     )
 }

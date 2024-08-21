@@ -1,48 +1,44 @@
 'use client'
-import Button from '@/components/shared/Button'
+import RegisterForm from '@/components/auth/register-form'
+import Top from '@/components/auth/Top'
 import ELink from '@/components/shared/ELink'
-import ErrorDiv from '@/components/shared/ErrorDiv'
-import Input from '@/components/shared/Input'
 import useMessage from '@/context/useMessage'
+import { api } from '@/trpc/client'
+import { forminterface } from '@/types'
+import { FormEvent, useRef } from 'react'
 
 export default function Page() {
-    const { message } = useMessage()
+    const { setMessage, setIsLoading } = useMessage()
+    const formref = useRef<HTMLFormElement | null>(null)
+    const createUserapi = api.userRouter.createUser.useMutation({
+        onSuccess: () => {
+            setMessage({ error: false, text: 'User Createad. Wait for approval.' })
+            formref.current?.reset();
+            setIsLoading(false)
+        },
+        onError: ({ message }) => {
+            setIsLoading(false)
+            setMessage({ error: true, text: message })
+        }
+    })
+    const handlesubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setMessage(null);
+        setIsLoading(true)
+        const formdata = new FormData(formref.current as HTMLFormElement)
+        const { c_password, email, password, name } = Object.fromEntries(formdata) as forminterface
+        if (password !== c_password) {
+            setIsLoading(false);
+            setMessage({ error: true, text: 'password and confirm password must be same' })
+            return
+        }
+        createUserapi.mutate({ email, name: name, password });
+    }
     return (
         <div className='w-full flex items-center p-2 h-screen overflow-y-auto overflow-x-hidden justify-center'>
-            <div className="w-full border gap-5 rounded border-gray-100 max-w-[450px] py-4 px-2 flex flex-col">
-                <h1 className='text-center'>Register New User</h1>
-                <form className='flex flex-col gap-2'>
-                    <Input
-                        title='User Name'
-                        name='user_name'
-                        type='text'
-                        placeholder='John Doe'
-                    />
-                    <Input
-                        title='Email'
-                        name='email'
-                        type='email'
-                        placeholder='test@example.com'
-                    />
-                    <Input
-                        title='Password'
-                        name='password'
-                        type='password'
-                        placeholder='******'
-                    />
-                    <Input
-                        title='Confirm Password'
-                        name='confirm_password'
-                        type='password'
-                        placeholder='******'
-                    />
-                    <Button
-                        className='bg-gray-800 py-1 rounded-sm text-white'
-                        title='Register'
-                        type='submit'
-                    />
-                    {message && <ErrorDiv />}
-                </form>
+            <div className="w-full border gap-5 rounded border-gray-100 max-w-[400px] p-4 flex flex-col">
+                <Top title='Register New User' />
+                <RegisterForm formref={formref} handlesubmit={handlesubmit} />
                 <ELink className='underline' href='/auth/signin' title={`Already Have an Account?`} />
             </div>
         </div>
