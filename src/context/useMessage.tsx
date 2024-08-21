@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, useReducer, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useReducer, useState } from 'react'
 
 type messageType = {
     error: boolean;
@@ -12,7 +12,7 @@ export type messageContextType = {
     setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-export const MessageContext = React.createContext<messageContextType | null>(null)
+export const MessageContext = createContext<messageContextType | null>(null)
 
 export function MessageContextProvider({ children }: { children: ReactNode }) {
     const [message, setMessage] = useState<messageType>(null)

@@ -1,18 +1,30 @@
+'use client'
+import useMessage from '@/context/useMessage';
+import clsx from 'clsx';
 import Link from 'next/link'
-import { MouseEventHandler } from 'react'
+import { useRouter } from 'next/navigation';
+import { MouseEvent, MouseEventHandler } from 'react'
 
 export default function ELink({
     title,
     href,
     className,
-    onClick
 }: {
     title: string;
     href: string;
     className?: string
-    onClick?: MouseEventHandler<HTMLAnchorElement>
 }) {
+    const { setIsLoading } = useMessage()
+    const router = useRouter()
+    const handleMouse = (e: MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault()
+        setIsLoading(true)
+        router.push(href)
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 500)
+    }
     return (
-        <Link href={href} onClick={onClick} className={className}>{title}</Link>
+        <Link href={href} onClick={(e) => handleMouse(e)} className={clsx(className)}>{title}</Link>
     )
 }
