@@ -9,7 +9,7 @@ import { SessionProvider } from 'next-auth/react'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  icons: '/static/S02.png',
+  icons: '/favicon.ico',
   title: "Shop Management System",
   description: "Shop Management System, Invoices , Users for controlling app, Shop to manage products and their stocks,POS System",
 };
@@ -22,7 +22,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body suppressHydrationWarning={true} className={inter.className}>
         <MessageContextProvider>
           <TrpcProvider>
             <SessionProvider session={session}>

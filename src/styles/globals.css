@@ -14,6 +14,6 @@ input[type="number"] {
 }
 
 .filter {
-  filter: invert(54%) sepia(99%) saturate(2998%) hue-rotate(183deg)
-    brightness(100%) contrast(98%);
+  filter: invert(52%) sepia(80%) saturate(3985%) hue-rotate(202deg)
+    brightness(98%) contrast(97%);
 }

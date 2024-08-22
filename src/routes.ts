@@ -26,6 +26,6 @@ export const apiAuthPrefix = '/api/auth'
 /**
  * for redirect url
  * @type {string}
- */
+*/
 
 export const DEFAULT_LOGIN_REDIRECT = '/dashboard'

@@ -39,7 +39,7 @@ export default function Page() {
             <div className="w-full border gap-5 rounded border-gray-100 max-w-[400px] p-4 flex flex-col">
                 <Top title='Register New User' />
                 <RegisterForm formref={formref} handlesubmit={handlesubmit} />
-                <ELink className='underline' href='/auth/signin' title={`Already Have an Account?`} />
+                <ELink isActivelink={false} className='underline' href='/auth/signin' title={`Already Have an Account?`} />
             </div>
         </div>
     )
