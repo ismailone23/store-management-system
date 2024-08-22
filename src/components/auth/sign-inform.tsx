@@ -30,7 +30,7 @@ export default function SignInForm({
             />
             <Button
                 disabled={isLoading}
-                className='bg-sky-500 disabled:bg-blue-300 py-1 rounded-sm text-white'
+                className='bg-gray-800 disabled:bg-gray-700 py-1 rounded-sm text-white'
                 title='Sign In'
                 type='submit'
             />

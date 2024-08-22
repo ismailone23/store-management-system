@@ -1,16 +1,12 @@
 'use client'
-
-import ELink from "@/components/shared/ELink";
 import { api } from "@/trpc/client";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const helloapi = api.hello.useQuery();
   console.log(helloapi.data?.message);
-
-  return (
-    <>
-      <div>hello</div>
-      <ELink href="/auth/signin" title="signin" />
-    </>
-  );
+  const session = useSession();
+  if (session.status === "unauthenticated") return redirect('/auth/signin')
+  return redirect('/dashboard')
 }
