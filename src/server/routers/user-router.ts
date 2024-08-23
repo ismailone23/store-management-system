@@ -1,15 +1,16 @@
 import { getUserByEmail } from '@/lib/utils/actions';
-import { createTRPCRouter, publicProcedure } from '@/trpc/trpc';
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/trpc/trpc';
 import { z } from 'zod';
 import { UserTable } from '../schema';
 import { hash } from 'bcryptjs'
+import { desc } from 'drizzle-orm';
 
 export const userRouter = createTRPCRouter({
     createUser: publicProcedure.input(z.object({
-        name: z.string({ message: 'Please fill up all the fields' }),
-        email: z.string({ message: 'Please fill up all the fields.' }),
-        password: z.string({ message: 'Please fill up all the fields.' })
-            .min(6, { message: 'password must be 6 character.' })
+        name: z.string(),
+        email: z.string(),
+        password: z.string()
+            .min(6)
     })).mutation(async ({ ctx: { db }, input: {
         email,
         name,
@@ -23,11 +24,9 @@ export const userRouter = createTRPCRouter({
         if (!newUser) throw new Error('Unable to ereate user');
         return newUser
     }),
-    getUser: publicProcedure.input(z.object({
-        email: z.string({ message: 'Please fill up all the fields.' }),
-        password: z.string({ message: 'Please fill up all the fields.' })
-            .min(6, { message: 'password must be 6 character.' })
-    })).mutation(async ({ ctx: { db }, input: { email, password } }) => {
-
+    getUsers: protectedProcedure.query(async ({ ctx: { db } }) => {
+        const users = await db.query.UserTable.findMany({ orderBy: desc(UserTable.createdat) })
+        if (!users) throw new Error('Unable to find all the users')
+        return users
     })
 })

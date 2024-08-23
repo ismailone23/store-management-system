@@ -1,7 +1,11 @@
+import Metadata from '@/components/shared/Metadata'
 import React from 'react'
 
-export default function page() {
+export default function Page() {
     return (
-        <div>page</div>
+        <>
+            <Metadata seoTitle='Reports | SuperFaster' />
+            <div>page</div>
+        </>
     )
 }

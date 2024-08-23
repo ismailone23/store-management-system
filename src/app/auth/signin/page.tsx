@@ -2,6 +2,7 @@
 import SignInForm from '@/components/auth/sign-inform'
 import Top from '@/components/auth/Top'
 import ELink from '@/components/shared/ELink'
+import Metadata from '@/components/shared/Metadata'
 import useMessage from '@/context/useMessage'
 import { getUserByEmail } from '@/lib/utils/actions'
 import { logintype } from '@/types'
@@ -55,12 +56,15 @@ export default function Page() {
         })
     }
     return (
-        <div className='w-full flex items-center p-2 h-screen overflow-y-auto overflow-x-hidden justify-center'>
-            <div className="w-full border gap-5 rounded border-gray-100 max-w-[400px] p-4 flex flex-col">
-                <Top title='SigIn Option' />
-                <SignInForm formref={formref} handleSubmit={handleSubmit} />
-                <ELink isActivelink={false} className='underline' href='/auth/register' title={`Don't Have an Account?`} />
+        <>
+            <Metadata seoTitle='Signin | SuperFaster' />
+            <div className='w-full flex items-center p-2 h-screen overflow-y-auto overflow-x-hidden justify-center'>
+                <div className="w-full border gap-5 rounded border-gray-100 max-w-[400px] p-4 flex flex-col">
+                    <Top title='SigIn Option' />
+                    <SignInForm formref={formref} handleSubmit={handleSubmit} />
+                    <ELink isActivelink={false} className='underline' href='/auth/register' title={`Don't Have an Account?`} />
+                </div>
             </div>
-        </div>
+        </>
     )
 }

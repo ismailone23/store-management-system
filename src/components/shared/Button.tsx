@@ -1,4 +1,4 @@
-import { ComponentProps, MouseEventHandler } from 'react'
+import { ComponentProps, MouseEventHandler, ReactNode } from 'react'
 
 export default function Button({
     title,
@@ -6,20 +6,18 @@ export default function Button({
     onClick,
     Icon,
     disabled,
-    className,
-    iconClas
+    className
 }: {
     title: string;
     type: 'submit' | 'button';
     onClick?: MouseEventHandler<HTMLButtonElement>;
-    Icon?: (props: ComponentProps<"svg">) => JSX.Element;
+    Icon?: ReactNode;
     disabled?: boolean;
     className: string;
-    iconClas?: string;
 }) {
     return (
         <button disabled={disabled} onClick={onClick} className={className} type={type}>
-            {Icon && <Icon className={iconClas} />}
+            {Icon && Icon}
             {title}
         </button>
     )

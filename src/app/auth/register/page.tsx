@@ -2,6 +2,7 @@
 import RegisterForm from '@/components/auth/register-form'
 import Top from '@/components/auth/Top'
 import ELink from '@/components/shared/ELink'
+import Metadata from '@/components/shared/Metadata'
 import useMessage from '@/context/useMessage'
 import { api } from '@/trpc/client'
 import { forminterface } from '@/types'
@@ -35,12 +36,15 @@ export default function Page() {
         createUserapi.mutate({ email, name: name, password });
     }
     return (
-        <div className='w-full flex items-center p-2 h-screen overflow-y-auto overflow-x-hidden justify-center'>
-            <div className="w-full border gap-5 rounded border-gray-100 max-w-[400px] p-4 flex flex-col">
-                <Top title='Register New User' />
-                <RegisterForm formref={formref} handlesubmit={handlesubmit} />
-                <ELink isActivelink={false} className='underline' href='/auth/signin' title={`Already Have an Account?`} />
+        <>
+            <Metadata seoTitle='Register User | SuperFaster' />
+            <div className='w-full flex items-center p-2 h-screen overflow-y-auto overflow-x-hidden justify-center'>
+                <div className="w-full border gap-5 rounded border-gray-100 max-w-[400px] p-4 flex flex-col">
+                    <Top title='Register New User' />
+                    <RegisterForm formref={formref} handlesubmit={handlesubmit} />
+                    <ELink isActivelink={false} className='underline' href='/auth/signin' title={`Already Have an Account?`} />
+                </div>
             </div>
-        </div>
+        </>
     )
 }

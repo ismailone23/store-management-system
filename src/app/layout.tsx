@@ -10,7 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   icons: '/favicon.ico',
-  title: "Shop Management System",
   description: "Shop Management System, Invoices , Users for controlling app, Shop to manage products and their stocks,POS System",
 };
 
