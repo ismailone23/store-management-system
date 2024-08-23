@@ -6,6 +6,7 @@ import Loading from "@/components/shared/Loading";
 import { TrpcProvider } from "@/context/trpc-provider";
 import { auth } from "@/server/auth/auth";
 import { SessionProvider } from 'next-auth/react'
+import 'react-loading-skeleton/dist/skeleton.css'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

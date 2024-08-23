@@ -8,3 +8,5 @@ export type forminterface = {
     email: string;
     c_password: string
 }
+
+export type roletype = 'ADMIN' | 'OWNER' | 'BASIC'

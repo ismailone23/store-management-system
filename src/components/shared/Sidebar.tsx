@@ -4,6 +4,7 @@ import {
     BanknotesIcon,
     ChartBarIcon,
     CircleStackIcon,
+    CogIcon,
     DocumentIcon,
     GlobeAltIcon,
     IdentificationIcon,
@@ -19,6 +20,7 @@ const dashboardRoutes = [
     { title: 'Stocks', href: '/dashboard/stocks', icon: <ChartBarIcon className="w-5" /> },
     { title: 'Customers', href: '/dashboard/customers', icon: <GlobeAltIcon className="w-5" /> },
     { title: 'Users', href: '/dashboard/users', icon: <IdentificationIcon className="w-5" />, },
+    { title: 'Settings', href: '/dashboard/settings', icon: <CogIcon className="w-5" />, },
 ]
 export default function Sidebar() {
     const session = useSession();
@@ -26,7 +28,7 @@ export default function Sidebar() {
         <div className='w-full flex sm:flex-col border-r h-full border-gray-100'>
             {
                 dashboardRoutes.map(({ href, icon, title }, i) => <ELink
-                    className={`${((session.data?.user.role !== 'OWNER') && (title === 'Users')) ? 'hidden' : 'flex'} w-full sm:pl-4 gap-1 items-center sm:justify-start justify-center py-2 text-sm`}
+                    className={`${((session.data?.user.role === 'BASIC') && (title === 'Users')) ? 'hidden' : 'flex'} w-full sm:pl-4 gap-1 items-center sm:justify-start justify-center py-2 text-sm`}
                     isActivelink={true}
                     Icon={icon} key={i} href={href}
                     title={title}

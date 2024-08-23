@@ -4,8 +4,7 @@ import Metadata from '@/components/shared/Metadata';
 import { signOut } from 'next-auth/react';
 import React from 'react'
 
-export default function page() {
-
+export default function Page() {
     return (
         <>
             <Metadata seoTitle='Overview | SuperFaster' />

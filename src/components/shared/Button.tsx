@@ -8,17 +8,17 @@ export default function Button({
     disabled,
     className
 }: {
-    title: string;
+    title?: string;
     type: 'submit' | 'button';
     onClick?: MouseEventHandler<HTMLButtonElement>;
     Icon?: ReactNode;
     disabled?: boolean;
-    className: string;
+    className?: string;
 }) {
     return (
         <button disabled={disabled} onClick={onClick} className={className} type={type}>
             {Icon && Icon}
-            {title}
+            {disabled ? `${title}...` : title}
         </button>
     )
 }

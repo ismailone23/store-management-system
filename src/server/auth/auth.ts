@@ -12,14 +12,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
     session: { strategy: 'jwt' },
     callbacks: {
-        async jwt({ token }) {
+        async jwt({ token, trigger, session }) {
             if (!token.sub) return token
+            if (trigger == 'update' && (session?.name && session?.email)) {
+                token.name = session.name
+                token.email = session.email
+            }
             const user = await getUserById(token.sub)
             if (!user) return token
             token.role = user.role
             return token
         },
-        async session({ token, session }) {
+        async session({ token, session, newSession, trigger }) {
             if (token.sub && session.user) {
                 session.user.id = token.sub
             }
