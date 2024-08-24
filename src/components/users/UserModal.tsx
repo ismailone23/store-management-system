@@ -24,7 +24,7 @@ export default function UserModal({
 }) {
 
     return (
-        <div className='absolute top-0 flex items-center justify-center p-2 left-0 w-full h-full bg-black/5'>
+        <div className='absolute top-0 flex items-center justify-center p-2 left-0 w-full h-full bg-black/35'>
             <div className='relative max-w-[400px] gap-2 text-sm  w-full flex flex-col rounded bg-white p-4'>
                 <div className='w-full flex gap-1 flex-col'>
                     <h1>Email : {user.email}</h1>

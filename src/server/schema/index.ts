@@ -63,7 +63,7 @@ export const accounts = pgTable(
         }),
     })
 )
-export type accountsType = typeof accounts.$inferInsert
+export type accountsType = typeof accounts.$inferSelect
 
 export const sessions = pgTable("session", {
     sessionToken: text("sessionToken").primaryKey(),
@@ -77,6 +77,8 @@ export const sessions = pgTable("session", {
 export const ProductTable = pgTable('products', {
     id: uuid('id').defaultRandom().notNull().unique().primaryKey(),
     productname: varchar('product_name').notNull(),
+    isDeleted: boolean('is_deleted').notNull().default(false),
+    image: varchar('image').notNull().default('no image'),
     createdat: timestamp('created_at').defaultNow().notNull(),
     updatedat: timestamp('updated_at').defaultNow().notNull()
 }, table => {
@@ -84,29 +86,29 @@ export const ProductTable = pgTable('products', {
         productIndex: uniqueIndex('product_index').on(table.id)
     }
 })
-export type ProductTableType = typeof ProductTable.$inferInsert
+export type ProductTableType = typeof ProductTable.$inferSelect
 
 export const PriceTable = pgTable("prices", {
     id: uuid('id').notNull().defaultRandom().unique().primaryKey(),
-    productid: uuid('product_id').notNull().references(() => ProductTable.id),
+    productid: uuid('product_id').notNull().references(() => ProductTable.id, { onDelete: 'cascade' }),
     purchasedprice: real('purchased_price').notNull().default(0),
     mrp: real('mrp').notNull().default(0),
-    discount: real('purchased_price').notNull().default(0),
-    emailVerified: timestamp("emailVerified", { mode: "date" }),
+    discount: real('discount').notNull().default(0),
     createdat: timestamp('created_at').defaultNow().notNull(),
     updatedat: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export type PriceTableType = typeof PriceTable.$inferInsert
+export type PriceTableType = typeof PriceTable.$inferSelect
 
 export const StocksTable = pgTable('stocks', {
     id: uuid('id').notNull().defaultRandom().unique().primaryKey(),
-    productid: uuid('product_id').notNull().references(() => ProductTable.id),
+    productid: uuid('product_id').notNull().references(() => ProductTable.id, { onDelete: 'cascade' }),
     totalstock: real('purchased_price').notNull().default(0),
     history: varchar('history').notNull(),
     createdat: timestamp('created_at').defaultNow().notNull(),
     updatedat: timestamp('updated_at').defaultNow().notNull()
 })
+export type StocksTableType = typeof StocksTable.$inferSelect
 // relations
 export const UserAccountRelations = relations(UserTable, ({ one, many }) => {
     return {
@@ -125,7 +127,7 @@ export const AccountUserRelations = relations(accounts, ({ one }) => {
 export const ProductPriceStockRelation = relations(ProductTable, ({ one }) => {
     return {
         price: one(PriceTable),
-        stocks: one(StocksTable)
+        stock: one(StocksTable)
     }
 })
 export const PriceProductRelation = relations(PriceTable, ({ one }) => {

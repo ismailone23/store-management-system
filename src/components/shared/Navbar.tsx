@@ -9,11 +9,11 @@ export default function Navbar() {
     const path = usePathname()
     const session = useSession();
     return (
-        <div className='flex justify-between w-full items-center sm:px-0 px-3 sm:h-12 h-14 border-b'>
+        <div className='flex justify-between w-full items-center sm:px-0 px-1 h-12 border-b'>
             <div className='sm:flex lg:max-w-48 md:max-w-44 sm:max-w-40 w-full sm:border-r h-full flex'>
                 <Link href={'/dashboard'} className='sm:pl-3'>
                     <Image priority
-                        className='w-[6.5rem] sm:h-12 h-[3.5rem] filter'
+                        className='w-[6rem] h-[3rem] filter'
                         quality={100}
                         src={'/static/logo.png'}
                         width="0"
@@ -35,7 +35,7 @@ export default function Navbar() {
                 <div className='sm:pr-3'>
                     {
                         session.status === 'authenticated' &&
-                        <h1 className='text-gray-700'>{session.data.user.name}</h1>
+                        <h1 className='text-gray-700 truncate line-clamp-1'>{session.data.user.name}</h1>
                     }
                 </div>
             </div>

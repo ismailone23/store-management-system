@@ -1,5 +1,5 @@
 {
-  "id": "1936d536-9425-4b3a-9973-b773aacbd3a9",
+  "id": "1dcf39bd-0feb-413e-95ca-3b346f1033f7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -11,7 +11,7 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
@@ -35,11 +35,12 @@
           "notNull": true,
           "default": 0
         },
-        "emailVerified": {
-          "name": "emailVerified",
-          "type": "timestamp",
+        "discount": {
+          "name": "discount",
+          "type": "real",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": 0
         },
         "created_at": {
           "name": "created_at",
@@ -68,7 +69,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -90,7 +91,7 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
@@ -99,6 +100,20 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_deleted": {
+          "name": "is_deleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'no image'"
         },
         "created_at": {
           "name": "created_at",
@@ -151,7 +166,7 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
@@ -201,7 +216,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -223,12 +238,12 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "username": {
-          "name": "username",
+        "name": {
+          "name": "name",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -252,13 +267,19 @@
           "primaryKey": false,
           "notNull": true
         },
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
         "user_role": {
           "name": "user_role",
           "type": "user_role",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'UNKNOWN'"
+          "default": "'BASIC'"
         },
         "created_at": {
           "name": "created_at",
@@ -266,6 +287,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -465,8 +492,7 @@
       "values": [
         "ADMIN",
         "BASIC",
-        "OWNER",
-        "UNKNOWN"
+        "OWNER"
       ]
     }
   },

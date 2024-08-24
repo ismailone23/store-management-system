@@ -67,15 +67,15 @@ export default function Page() {
     return (
         <>
             <Metadata seoTitle='Users | SuperFaster' />
-            <div className='flex overflow-x-auto px-4 py-4'>
+            <div className='flex  sm:px-4 sm:py-4 pt-2'>
                 {isFetching ?
-                    <div className='flex w-full flex-col'>
-                        <Skeleton count={1} width={1000} height={12} />
+                    <div className='flex w-full no-scrollbar overflow-x-auto flex-col'>
+                        <Skeleton count={1} width={500} height={8} />
                         <div className='flex w-full gap-2'>
-                            <Skeleton count={1} width={244} height={12} />
-                            <Skeleton count={1} width={244} height={12} />
-                            <Skeleton count={1} width={244} height={12} />
-                            <Skeleton count={1} width={244} height={12} />
+                            <Skeleton count={1} width={120} height={8} />
+                            <Skeleton count={1} width={120} height={8} />
+                            <Skeleton count={1} width={120} height={8} />
+                            <Skeleton count={1} width={120} height={8} />
                         </div>
                     </div>
                     :

@@ -1,13 +1,7 @@
 'use server'
-
-import { signIn } from "@/server/auth/auth"
 import { db } from "@/server/db"
 import { UserTable } from "@/server/schema"
-import { logintype } from "@/types"
-import { compare } from "bcryptjs"
 import { eq } from "drizzle-orm"
-import { AuthError } from "next-auth"
-import { MutableRefObject } from "react"
 
 export const getUserByEmail = async (email: string) => {
     try {

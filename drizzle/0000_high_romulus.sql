@@ -1,30 +1,32 @@
 DO $$ BEGIN
- CREATE TYPE "public"."user_role" AS ENUM('ADMIN', 'BASIC', 'OWNER', 'UNKNOWN');
+ CREATE TYPE "public"."user_role" AS ENUM('ADMIN', 'BASIC', 'OWNER');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "prices" (
-	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"product_id" uuid NOT NULL,
 	"purchased_price" real DEFAULT 0 NOT NULL,
 	"mrp" real DEFAULT 0 NOT NULL,
-	"emailVerified" timestamp,
+	"discount" real DEFAULT 0 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "prices_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "products" (
-	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"product_name" varchar NOT NULL,
+	"is_deleted" boolean DEFAULT false NOT NULL,
+	"image" varchar DEFAULT 'no image' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "products_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "stocks" (
-	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"product_id" uuid NOT NULL,
 	"purchased_price" real DEFAULT 0 NOT NULL,
 	"history" varchar NOT NULL,
@@ -34,13 +36,15 @@ CREATE TABLE IF NOT EXISTS "stocks" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
-	"username" varchar NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" varchar NOT NULL,
 	"email" varchar NOT NULL,
 	"is_approved" boolean DEFAULT false NOT NULL,
 	"password" varchar NOT NULL,
-	"user_role" "user_role" DEFAULT 'UNKNOWN' NOT NULL,
+	"emailVerified" timestamp,
+	"user_role" "user_role" DEFAULT 'BASIC' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
+	"image" text,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "users_id_unique" UNIQUE("id"),
 	CONSTRAINT "users_email_unique" UNIQUE("email")
@@ -68,13 +72,13 @@ CREATE TABLE IF NOT EXISTS "session" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "prices" ADD CONSTRAINT "prices_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "prices" ADD CONSTRAINT "prices_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "stocks" ADD CONSTRAINT "stocks_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "stocks" ADD CONSTRAINT "stocks_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
