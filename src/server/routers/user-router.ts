@@ -40,7 +40,7 @@ export const userRouter = createTRPCRouter({
             role: z.string().optional(),
         })).mutation(async ({ ctx: { db }, input: { id, isapproved, role, name, email, password } }) => {
             let updateduser;
-            if (isapproved && role) {
+            if (role) {
                 updateduser = await db.update(UserTable)
                     .set({
                         isapproved,
