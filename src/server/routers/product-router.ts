@@ -1,8 +1,8 @@
 import { createTRPCRouter, protectedProcedure } from "@/trpc/trpc";
 import { z } from "zod";
 import { PriceTable, ProductTable, StocksTable } from "@/server/schema";
-import { stockhistory } from "@/types";
-import { desc, eq } from "drizzle-orm";
+import { productsjointype, stockhistory } from "@/types";
+import { and, desc, eq, gt } from "drizzle-orm";
 
 export const productRouter = createTRPCRouter({
     createProduct: protectedProcedure.input(z.object({
@@ -40,12 +40,15 @@ export const productRouter = createTRPCRouter({
             return data
         }).catch(err => { return err })
     }),
-    getProdcts: protectedProcedure.query(async ({ ctx: { db } }) => {
-        const productjoin = await db.select()
+    getProdcts: protectedProcedure.input(z.string().optional()).query(async ({ ctx: { db }, input: str }) => {
+        if (!str) return await db.select()
             .from(ProductTable)
             .innerJoin(PriceTable, eq(PriceTable.productid, ProductTable.id))
             .innerJoin(StocksTable, eq(StocksTable.productid, ProductTable.id)).where(eq(ProductTable.isDeleted, false)).orderBy(desc(ProductTable.updatedat))
-        return productjoin
+        return await db.select()
+            .from(ProductTable)
+            .innerJoin(PriceTable, eq(PriceTable.productid, ProductTable.id))
+            .innerJoin(StocksTable, eq(StocksTable.productid, ProductTable.id)).where(and(gt(StocksTable.totalstock, 0), eq(ProductTable.isDeleted, false))).orderBy(desc(ProductTable.updatedat))
     }),
     updateProduct: protectedProcedure.input(z.object({
         id: z.string().optional(),

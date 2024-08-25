@@ -1,0 +1,1 @@
+ALTER TABLE "invoices" ADD COLUMN "created_by" varchar NOT NULL;

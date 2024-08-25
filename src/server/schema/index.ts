@@ -6,6 +6,7 @@ import {
     pgTable,
     primaryKey,
     real,
+    serial,
     text,
     timestamp,
     uniqueIndex,
@@ -16,6 +17,7 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters"
 
 export const UserRole = pgEnum('user_role', ['ADMIN', 'BASIC', 'OWNER'])
+export const PaymentType = pgEnum('payment_type', ['CASH', 'ONLINE', 'PENDING'])
 
 export const UserTable = pgTable('users', {
     id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
@@ -109,6 +111,36 @@ export const StocksTable = pgTable('stocks', {
     updatedat: timestamp('updated_at').defaultNow().notNull()
 })
 export type StocksTableType = typeof StocksTable.$inferSelect
+
+export const InvoicesTable = pgTable('invoices', {
+    id: uuid('id').notNull().defaultRandom().primaryKey(),
+    dealerid: serial('dealer_id').notNull().references(() => CustomerTable.dealerid),
+    purchasedlist: varchar('purchased_list').notNull(),
+    createdby: varchar('created_by').notNull(),
+    paymentmethod: PaymentType('payment_method').notNull().default('PENDING'),
+    createdat: timestamp('created_at').defaultNow().notNull(),
+    updatedat: timestamp('updated_at').defaultNow().notNull()
+})
+
+export type Invoicestype = typeof InvoicesTable.$inferSelect
+
+export const CustomerTable = pgTable('customers', {
+    dealerid: serial('dealer_id').notNull().primaryKey().unique(),
+    name: varchar('name').notNull(),
+    number: varchar('number').notNull().unique(),
+    totaldebit: real('t_debit').notNull().default(0),
+    totalcredit: real('t_credit').notNull().default(0),
+    history: varchar('history').notNull(),
+    createdat: timestamp('created_at').defaultNow().notNull(),
+    updatedat: timestamp('updated_at').defaultNow().notNull(),
+}, table => {
+    return {
+        tableindex: uniqueIndex('tableindex').on(table.dealerid, table.number)
+    }
+})
+export type Customertype = typeof CustomerTable.$inferSelect
+
+
 // relations
 export const UserAccountRelations = relations(UserTable, ({ one, many }) => {
     return {
@@ -143,6 +175,19 @@ export const StockProductRelation = relations(StocksTable, ({ one }) => {
         product: one(ProductTable, {
             fields: [StocksTable.productid],
             references: [ProductTable.id]
+        })
+    }
+})
+export const CustomerInvoiceRelation = relations(CustomerTable, ({ many }) => {
+    return {
+        invoices: many(InvoicesTable)
+    }
+})
+export const InvoiceCustomer = relations(InvoicesTable, ({ one }) => {
+    return {
+        customer: one(CustomerTable, {
+            fields: [InvoicesTable.dealerid],
+            references: [CustomerTable.dealerid]
         })
     }
 })

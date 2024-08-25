@@ -24,7 +24,7 @@ export default function Navbar() {
                 </Link>
             </div>
             <div className='flex justify-between items-center sm:w-full px-2'>
-                <h1 className='text-sm sm:flex hidden'>
+                <h1 className='text-sm sm:flex gap-1 hidden'>
                     <Link href={'/dashboard'} className={`${path.split('/').length > 0 ? "text-gray-400" : 'text-gray-700'}`}>Dashboard</Link>
                     <span> / </span>
                     {
@@ -32,7 +32,7 @@ export default function Navbar() {
                         <span className='capitalize text-gray-700'>{path.split('/')[2]}</span>
                     }
                 </h1>
-                <div className='sm:pr-3'>
+                <div className=''>
                     {
                         session.status === 'authenticated' &&
                         <h1 className='text-gray-700 truncate line-clamp-1'>{session.data.user.name}</h1>

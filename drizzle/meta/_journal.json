@@ -8,6 +8,34 @@
       "when": 1724501565087,
       "tag": "0000_high_romulus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724577392010,
+      "tag": "0001_funny_karma",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1724579496502,
+      "tag": "0002_orange_lilith",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1724593562448,
+      "tag": "0003_big_silvermane",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1724599938198,
+      "tag": "0004_unusual_thing",
+      "breakpoints": true
     }
   ]
 }

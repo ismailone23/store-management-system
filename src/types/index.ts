@@ -32,3 +32,14 @@ export type productsjointype = {
     prices: PriceTableType,
     stocks: StocksTableType
 }
+
+export type purchasedlist = {
+    productid: string;
+    quantity: number;
+    mrp: number;
+}
+export type customerhistory = {
+    date: Date;
+    amount: number,
+    type: 'debit' | 'credit'
+}

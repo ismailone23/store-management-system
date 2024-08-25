@@ -81,6 +81,7 @@ export default function Page() {
         setIsLoading(true)
         const formdata = new FormData(formRef.current as HTMLFormElement)
         const { discount, mrp, productname, purchasedprice, totalstock, image } = Object.fromEntries(formdata) as stockformtype;
+        if (Number(discount) > 0) return setMessage({ error: true, text: 'discount cant be more than 100' })
         if (!image || image.size < 1) {
             return createproductapi.mutate({
                 discount: Number(discount),
@@ -108,6 +109,7 @@ export default function Page() {
             e.preventDefault();
             const formdata = new FormData(upformRef.current as HTMLFormElement)
             const { discount, mrp, productname, purchasedprice, totalstock, image } = Object.fromEntries(formdata) as stockformtype;
+            if (Number(discount) > 0) return setMessage({ error: true, text: 'discount cant be more than 100' })
             if (!image || image.size < 1) {
                 return productupdateapi.mutate({
                     id: isUpModalOpen.id,
@@ -140,10 +142,10 @@ export default function Page() {
         <>
             <Metadata seoTitle='Stocks | SuperFaster' />
             <div className='w-full flex flex-col h-full overflow-hidden'>
-                <div className='md:px-4 md:pt-4 sm:px-2 pb-1 pt-2 flex w-full'>
+                <div className='md:px-2 md:pt-4 sm:px-2 pb-1 pt-2 flex w-full'>
                     <StockTop searchText={searchText} setSearchText={setSearchText} setIsModalOpen={setIsModalOpen} />
                 </div>
-                <div className="w-full sm:px-4 h-auto no-scrollbar overflow-y-auto">
+                <div className="w-full sm:px-2 h-auto no-scrollbar overflow-y-auto">
                     {isFetching ? <Loading /> : catchedMutateData && <DisplaySt setDetail={setDetail} setIsUpModalOpen={setIsUpModalOpen} handleUpdate={handleUpdate} data={catchedMutateData} />}
                 </div>
             </div>

@@ -1,8 +1,8 @@
 'use client'
 
 import React, { ChangeEvent, Dispatch, FormEvent, MutableRefObject, SetStateAction, useState } from 'react'
-import Button from '../shared/Button'
-import Input from '../shared/Input'
+import Button from '@/components/shared/Button'
+import Input from '@/components/shared/Input'
 import Image from 'next/image';
 import useMessage from '@/context/useMessage';
 

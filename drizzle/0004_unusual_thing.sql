@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "tableindex" ON "customers" USING btree ("dealer_id","number");--> statement-breakpoint
+ALTER TABLE "customers" ADD CONSTRAINT "customers_number_unique" UNIQUE("number");

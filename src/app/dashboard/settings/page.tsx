@@ -6,7 +6,7 @@ import Metadata from "@/components/shared/Metadata";
 import useMessage from "@/context/useMessage";
 import { api } from "@/trpc/client";
 import { UserIcon } from "@heroicons/react/24/outline";
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { FormEvent, useRef } from "react";
 
 export default function Page() {
@@ -56,8 +56,9 @@ export default function Page() {
                         <Input required name='name' value={user.name} placeholder={user.name} title='Username' type='text' />
                         <Input required name='email' value={user.email} placeholder={user.email} title='Email' type='email' />
                         <Input name='password' placeholder='******' title='Password' type='password' />
-                        <div className='w-full'>
-                            <Button disabled={isLoading} type='submit' className='py-1 float-right px-2 bg-blue-500 text-white rounded-sm' title='Update' />
+                        <div className='w-full flex justify-between'>
+                            <Button disabled={isLoading} type='button' onClick={() => signOut()} className='py-1 px-2 bg-gray-700 text-white rounded-sm' title='Signout' />
+                            <Button disabled={isLoading} type='submit' className='py-1 px-2 bg-blue-500 text-white rounded-sm' title='Update' />
                         </div>
                     </form>
                 </div>

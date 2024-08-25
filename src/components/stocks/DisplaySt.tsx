@@ -32,7 +32,7 @@ export default function DisplaySt({
                                     products.image === 'no image' ?
                                         <Image priority src={'/static/nophoto.jpeg'} alt='product image' className='w-full rounded h-full object-cover' width='0' height='0' sizes='100vw' />
                                         :
-                                        <Image priority src={products.image} alt='product image' className='w-full h-full rounded object-cover' width='0' height='0' sizes='100vw' />
+                                        <Image priority src={products.image} alt='product image' className='w-full h-full rounded object-contain' width='0' height='0' sizes='100vw' />
                                 }
                             </div>
                             <div className='flex text-sm flex-col gap-1'>
