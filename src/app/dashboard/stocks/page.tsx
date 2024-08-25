@@ -12,7 +12,8 @@ import { stockformtype } from '@/types';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useSession } from 'next-auth/react';
 import React, { FormEvent, useMemo, useRef, useState } from 'react'
-import Skeleton from 'react-loading-skeleton';
+import Loading from './loading';
+
 export default function Page() {
     const session = useSession();
     const { setIsLoading, setMessage } = useMessage()
@@ -47,12 +48,13 @@ export default function Page() {
         }
     });
     const { isError, isFetching, data } = productapi
+    const [searchText, setSearchText] = useState<string>('')
 
 
     const catchedMutateData = useMemo(() => {
         if (isError || isFetching) return null
-        return data
-    }, [isFetching, data, isError]);
+        return data?.filter(da => da.products.productname.toLowerCase().includes(searchText.toLowerCase()))
+    }, [isFetching, data, isError, searchText]);
 
 
     const createproductapi = api.productRouter.createProduct.useMutation({
@@ -67,7 +69,12 @@ export default function Page() {
             setMessage({ error: true, text: message })
         }
     });
-
+    async function getURL(image: File) {
+        const imageblob = URL.createObjectURL(image)
+        const newImageRef = ref(storage, imageblob);
+        await uploadBytesResumable(newImageRef, image);
+        return await getDownloadURL(newImageRef);
+    }
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setMessage(null)
@@ -84,10 +91,7 @@ export default function Page() {
                 userid: session.data?.user.email
             })
         }
-        const imageblob = URL.createObjectURL(image)
-        const newImageRef = ref(storage, imageblob);
-        await uploadBytesResumable(newImageRef, image);
-        const imgUrl = await getDownloadURL(newImageRef);
+        const imgUrl = await getURL(image)
         return createproductapi.mutate({
             discount: Number(discount),
             mrp: Number(mrp),
@@ -105,7 +109,6 @@ export default function Page() {
             const formdata = new FormData(upformRef.current as HTMLFormElement)
             const { discount, mrp, productname, purchasedprice, totalstock, image } = Object.fromEntries(formdata) as stockformtype;
             if (!image || image.size < 1) {
-                console.log('here 01');
                 return productupdateapi.mutate({
                     id: isUpModalOpen.id,
                     discount: Number(discount),
@@ -116,12 +119,7 @@ export default function Page() {
                     userid: session.data?.user.email
                 })
             }
-            console.log('here 101');
-            const imageblob = URL.createObjectURL(image)
-            const newImageRef = ref(storage, imageblob);
-            await uploadBytesResumable(newImageRef, image);
-            const imgUrl = await getDownloadURL(newImageRef);
-            console.log(imgUrl);
+            const imgUrl = await getURL(image)
 
             return productupdateapi.mutate({
                 id: isUpModalOpen.id,
@@ -135,8 +133,6 @@ export default function Page() {
             })
 
         } else {
-            console.log('mutating');
-
             productdeleteapi.mutate(isUpModalOpen.id)
         }
     }
@@ -145,15 +141,10 @@ export default function Page() {
             <Metadata seoTitle='Stocks | SuperFaster' />
             <div className='w-full flex flex-col h-full overflow-hidden'>
                 <div className='md:px-4 md:pt-4 sm:px-2 pb-1 pt-2 flex w-full'>
-                    <StockTop setIsModalOpen={setIsModalOpen} />
+                    <StockTop searchText={searchText} setSearchText={setSearchText} setIsModalOpen={setIsModalOpen} />
                 </div>
-                <h1 className='w-full text-center py-1'>All Stocks</h1>
                 <div className="w-full sm:px-4 h-auto no-scrollbar overflow-y-auto">
-                    {isFetching ? <div className='grid xl:grid-cols-3 md:grid-cols-2 w-full'>
-                        <Skeleton count={1} width={350} height={120} />
-                        <Skeleton count={1} width={350} height={120} />
-                        <Skeleton count={1} width={350} height={120} />
-                    </div> : catchedMutateData && <DisplaySt setDetail={setDetail} setIsUpModalOpen={setIsUpModalOpen} handleUpdate={handleUpdate} data={catchedMutateData} />}
+                    {isFetching ? <Loading /> : catchedMutateData && <DisplaySt setDetail={setDetail} setIsUpModalOpen={setIsUpModalOpen} handleUpdate={handleUpdate} data={catchedMutateData} />}
                 </div>
             </div>
             {isModalOpen && <CreateStModal formRef={formRef} handleSubmit={handleSubmit} setIsModalOpen={setIsModalOpen} />}

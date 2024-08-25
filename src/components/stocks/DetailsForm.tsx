@@ -23,6 +23,9 @@ export default function DetailsForm({
                 <h1 className='text-base w-full text-center'>Details</h1>
                 <div className='flex flex-col gap-1 w-full'>
                     <h1>{joint.products.productname}</h1>
+                    <h1>Purchased Price : {joint.prices.purchasedprice}</h1>
+                    <h1>MRP : {joint.prices.mrp}</h1>
+                    <h1>Discount Going : {joint.prices.discount}%</h1>
                     <div>
                         {
                             history.map((hs, i) => <div className='flex flex-col gap-1' key={i}>

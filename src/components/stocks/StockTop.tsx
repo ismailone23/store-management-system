@@ -6,9 +6,13 @@ import useMessage from '@/context/useMessage'
 
 export default function StockTop
     ({
-        setIsModalOpen
+        setIsModalOpen,
+        searchText,
+        setSearchText
     }: {
-        setIsModalOpen: Dispatch<SetStateAction<boolean>>
+        setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+        searchText: string;
+        setSearchText: Dispatch<SetStateAction<string>>
     }) {
     const { isLoading } = useMessage();
     return (
@@ -16,6 +20,8 @@ export default function StockTop
             <div className="div w-full relative">
                 <MagnifyingGlassIcon className='absolute w-4 text-gray-700 sm:top-2 top-[0.4rem] sm:left-[0.4rem] left-[0.35rem]' />
                 <input
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
                     type="text"
                     name="search"
                     placeholder='search product with name'

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function loading() {
+export default function Loading() {
     return (
         <div className='w-full flex items-center h-screen justify-center '>
             <div className='flex max-w-[100px]'>
