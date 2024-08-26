@@ -114,14 +114,22 @@ export type StocksTableType = typeof StocksTable.$inferSelect
 
 export const InvoicesTable = pgTable('invoices', {
     id: uuid('id').notNull().defaultRandom().primaryKey(),
-    dealerid: serial('dealer_id').notNull().references(() => CustomerTable.dealerid),
+    dealerid: serial('dealer_id').notNull().references(() => CustomerTable.dealerid, { onDelete: 'cascade' }),
     purchasedlist: varchar('purchased_list').notNull(),
     createdby: varchar('created_by').notNull(),
     paymentmethod: PaymentType('payment_method').notNull().default('PENDING'),
     createdat: timestamp('created_at').defaultNow().notNull(),
     updatedat: timestamp('updated_at').defaultNow().notNull()
 })
-
+export const InvoicePricelist = pgTable('invoice_pricelist', {
+    id: uuid('id').notNull().defaultRandom().primaryKey(),
+    invoiceid: uuid('invoice_id').notNull().references(() => InvoicesTable.id, { onDelete: 'cascade' }),
+    mrp: real('mrp').notNull().default(0),
+    tbill: real('t_bill').notNull().default(0),
+    exdiscount: real('ex_discount').notNull().default(0),
+    tax: real('tax').notNull().default(0)
+})
+export type InvoicePricelistType = typeof InvoicePricelist.$inferSelect
 export type Invoicestype = typeof InvoicesTable.$inferSelect
 
 export const CustomerTable = pgTable('customers', {
@@ -183,11 +191,20 @@ export const CustomerInvoiceRelation = relations(CustomerTable, ({ many }) => {
         invoices: many(InvoicesTable)
     }
 })
-export const InvoiceCustomer = relations(InvoicesTable, ({ one }) => {
+export const InvoiceCustomerRelation = relations(InvoicesTable, ({ one }) => {
     return {
         customer: one(CustomerTable, {
             fields: [InvoicesTable.dealerid],
             references: [CustomerTable.dealerid]
+        }),
+        prices: one(InvoicePricelist)
+    }
+})
+export const PriceInvoiceRelation = relations(InvoicePricelist, ({ one }) => {
+    return {
+        invoices: one(InvoicesTable, {
+            fields: [InvoicePricelist.invoiceid],
+            references: [InvoicesTable.id]
         })
     }
 })

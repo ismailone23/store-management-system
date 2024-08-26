@@ -107,6 +107,7 @@ export const productRouter = createTRPCRouter({
         }),
     deleteProduct: protectedProcedure.input(z.string().optional()).mutation(async ({ ctx: { db }, input: id }) => {
         if (id) {
+            console.log(id);
             const date = new Date(Date.now())
             return db.update(ProductTable).set({ updatedat: date, isDeleted: true }).where(eq(ProductTable.id, id))
         }

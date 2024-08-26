@@ -28,15 +28,11 @@ export const customerRouter = createTRPCRouter({
     }),
     updateCustomer: protectedProcedure.input(z.object({
         dealerid: z.number(),
-        name: z.string().optional(),
-        number: z.string().optional(),
         debit: z.number().default(0),
         credit: z.number().default(0),
     })).mutation(async ({ ctx: { db },
         input: {
             dealerid,
-            number,
-            name,
             debit,
             credit
         } }) => {
@@ -59,7 +55,7 @@ export const customerRouter = createTRPCRouter({
             totaldebit = totaldebit - credit + debit
         }
         const history = JSON.stringify(cshistortjson)
-        return await db.update(CustomerTable).set({ number, name, totaldebit, totalcredit, history, updatedat: date })
+        return await db.update(CustomerTable).set({ totaldebit, totalcredit, history, updatedat: date }).where(eq(CustomerTable.dealerid, dealerid))
     }),
     deleteCustomer: protectedProcedure.input(z.number()).mutation(async ({ ctx: { db }, input: dealerid }) => {
         const csr = await db.query.CustomerTable.findFirst({ where: eq(CustomerTable.dealerid, dealerid) })

@@ -30,7 +30,7 @@ export default function DetailsForm({
                         {
                             history.map((hs, i) => <div className='flex flex-col gap-1' key={i}>
                                 <h1>{i + 1}. Added by {hs.userid}</h1>
-                                <h1 className='pl-3'>Quantity {hs.quantity} piece on {new Date(hs.date).getDate() + '-' + new Date(hs.date).getMonth() + 1 + '-' + new Date(hs.date).getFullYear()}</h1>
+                                <h1 className='pl-3'>Quantity {hs.quantity} piece on {new Date(hs.date).getDate() + '-' + (new Date(hs.date).getMonth() + 1) + '-' + new Date(hs.date).getFullYear()}</h1>
                             </div>
                             )
                         }

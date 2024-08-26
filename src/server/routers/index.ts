@@ -2,6 +2,7 @@ import { publicProcedure, createTRPCRouter } from "@/trpc/trpc";
 import { userRouter } from "./user-router";
 import { productRouter } from "./product-router";
 import { customerRouter } from "./customers";
+import { invoiceRouter } from "./invoices";
 
 export const appRouter = createTRPCRouter({
     hello: publicProcedure.query(async () => {
@@ -9,6 +10,7 @@ export const appRouter = createTRPCRouter({
     }),
     userRouter,
     productRouter,
-    customerRoute: customerRouter
+    customerRoute: customerRouter,
+    invoiceRoute: invoiceRouter
 })
 export type AppRouter = typeof appRouter

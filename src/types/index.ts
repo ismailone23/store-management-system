@@ -1,4 +1,4 @@
-import { PriceTableType, ProductTableType, StocksTableType } from "@/server/schema";
+import { InvoicePricelistType, Invoicestype, PriceTableType, ProductTableType, StocksTableType } from "@/server/schema";
 
 export type logintype = {
     email: string;
@@ -42,4 +42,15 @@ export type customerhistory = {
     date: Date;
     amount: number,
     type: 'debit' | 'credit'
+}
+export type invoiceformtype = {
+    dealerid: string;
+    mrp: string;
+    exdiscount: string;
+    tax: string;
+    tbill: string
+}
+export type invoicetype = {
+    invoices: Invoicestype,
+    invoice_pricelist: InvoicePricelistType
 }

@@ -23,6 +23,7 @@ export default function Page() {
     const upformRef = useRef<HTMLFormElement>(null)
     const formRef = useRef<HTMLFormElement>(null)
     const productapi = api.productRouter.getProdcts.useQuery();
+
     const productdeleteapi = api.productRouter.deleteProduct.useMutation({
         onSuccess: () => {
             setMessage({ error: true, text: 'Product Deleted' })
@@ -81,7 +82,10 @@ export default function Page() {
         setIsLoading(true)
         const formdata = new FormData(formRef.current as HTMLFormElement)
         const { discount, mrp, productname, purchasedprice, totalstock, image } = Object.fromEntries(formdata) as stockformtype;
-        if (Number(discount) > 0) return setMessage({ error: true, text: 'discount cant be more than 100' })
+        if (Number(discount) > 100) {
+            setIsLoading(false)
+            return setMessage({ error: true, text: 'discount cant be more than 100' })
+        }
         if (!image || image.size < 1) {
             return createproductapi.mutate({
                 discount: Number(discount),
@@ -109,7 +113,10 @@ export default function Page() {
             e.preventDefault();
             const formdata = new FormData(upformRef.current as HTMLFormElement)
             const { discount, mrp, productname, purchasedprice, totalstock, image } = Object.fromEntries(formdata) as stockformtype;
-            if (Number(discount) > 0) return setMessage({ error: true, text: 'discount cant be more than 100' })
+            if (Number(discount) > 100) {
+                setIsLoading(false)
+                return setMessage({ error: true, text: 'discount cant be more than 100' })
+            }
             if (!image || image.size < 1) {
                 return productupdateapi.mutate({
                     id: isUpModalOpen.id,
@@ -135,7 +142,12 @@ export default function Page() {
             })
 
         } else {
-            productdeleteapi.mutate(isUpModalOpen.id)
+            console.log(isUpModalOpen.id);
+        }
+    }
+    function handleDel(id: string) {
+        if (confirm('sure wants to delete ? ')) {
+            productdeleteapi.mutate(id)
         }
     }
     return (
@@ -146,13 +158,15 @@ export default function Page() {
                     <StockTop searchText={searchText} setSearchText={setSearchText} setIsModalOpen={setIsModalOpen} />
                 </div>
                 <div className="w-full sm:px-2 h-auto no-scrollbar overflow-y-auto">
-                    {isFetching ? <Loading /> : catchedMutateData && <DisplaySt setDetail={setDetail} setIsUpModalOpen={setIsUpModalOpen} handleUpdate={handleUpdate} data={catchedMutateData} />}
+                    {isFetching ? <Loading /> : catchedMutateData && <DisplaySt handleDel={handleDel} setDetail={setDetail}
+                        setIsUpModalOpen={setIsUpModalOpen} handleUpdate={handleUpdate} data={catchedMutateData} />}
                 </div>
             </div>
             {isModalOpen && <CreateStModal formRef={formRef} handleSubmit={handleSubmit} setIsModalOpen={setIsModalOpen} />}
             {(isUpModalOpen.open && catchedMutateData) && <UpdateStModal setIsUpModalOpen={setIsUpModalOpen} upformRef={upformRef}
                 handleUpdate={handleUpdate} product={catchedMutateData?.filter(d => d.products.id == isUpModalOpen.id)[0]} />}
-            {(detail.id && (detail.open && catchedMutateData)) && <DetailsForm setDetail={setDetail} joint={catchedMutateData?.filter(d => d.products.id == detail.id)[0]} />}
+            {(detail.id && (detail.open && catchedMutateData)) && <DetailsForm setDetail={setDetail}
+                joint={catchedMutateData?.filter(d => d.products.id == detail.id)[0]} />}
         </>
     )
 }

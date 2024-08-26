@@ -7,19 +7,16 @@ export default function DisplaySt({
     data,
     setIsUpModalOpen,
     handleUpdate,
-    setDetail
+    setDetail,
+    handleDel
 }: {
     data: productsjointype[];
     setIsUpModalOpen: Dispatch<SetStateAction<{ open: boolean; id: string }>>;
     setDetail: Dispatch<SetStateAction<{ open: boolean; id: string }>>;
-    handleUpdate: (e: (FormEvent<HTMLFormElement> | null), type: 'update' | 'delete') => Promise<void>
+    handleUpdate: (e: (FormEvent<HTMLFormElement> | null), type: 'update' | 'delete') => Promise<void>;
+    handleDel: (id: string) => void
 }) {
-    function handledel(id: string) {
-        if (confirm('do you want to delete this item ? ')) {
-            setIsUpModalOpen({ open: false, id })
-            handleUpdate(null, 'delete')
-        }
-    }
+
     return (
         <div className='flex flex-col w-full'>
             <h1 className='w-full text-center py-1'>All Stocks</h1>
@@ -43,7 +40,7 @@ export default function DisplaySt({
                                 <div className="flex gap-1">
                                     <button onClick={() => setDetail({ open: true, id: products.id })}><InformationCircleIcon className='w-5 text-purple-500' /></button>
                                     <button onClick={() => setIsUpModalOpen({ id: products.id, open: true })}><PencilSquareIcon className='w-5 text-blue-500' /></button>
-                                    <button onClick={() => handledel(products.id)} ><TrashIcon className='w-5 text-red-500' /></button>
+                                    <button onClick={() => handleDel(products.id)} ><TrashIcon className='w-5 text-red-500' /></button>
                                 </div>
                             </div>
                         </div>
