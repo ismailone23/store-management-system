@@ -1,8 +1,8 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+This is a admin panel or it can be said as a product management system for stores . Here you can track your stocks, invoices, collections, generate reports, customers credit and debit amount and so on . 
 
-## This is a admin panel or it can be said as a product management system for stores . Here you can track your stocks, invoices, collections, generate reports, customers credit and debit amount and so on . 
+## Getting Started
 
 First, run the development server:
 
