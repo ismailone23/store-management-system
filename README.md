@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+## This is a admin panel or it can be said as a product management system for stores . Here you can track your stocks, invoices, collections, generate reports, customers credit and debit amount and so on . 
+
 First, run the development server:
 
 ```bash
