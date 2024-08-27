@@ -6,8 +6,6 @@ import Input from '../shared/Input'
 import useMessage from '@/context/useMessage';
 import { api } from '@/trpc/client';
 import { purchasedlist } from '@/types';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Customertype } from '@/server/schema';
 
 export default function CreateInvoice({
     setIsOpen,

@@ -1,19 +1,18 @@
 import { productsjointype } from '@/types'
 import { InformationCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { useSession } from 'next-auth/react';
 import Image from 'next/image'
 import React, { Dispatch, FormEvent, SetStateAction } from 'react'
 
 export default function DisplaySt({
     data,
     setIsUpModalOpen,
-    handleUpdate,
     setDetail,
     handleDel
 }: {
     data: productsjointype[];
     setIsUpModalOpen: Dispatch<SetStateAction<{ open: boolean; id: string }>>;
     setDetail: Dispatch<SetStateAction<{ open: boolean; id: string }>>;
-    handleUpdate: (e: (FormEvent<HTMLFormElement> | null), type: 'update' | 'delete') => Promise<void>;
     handleDel: (id: string) => void
 }) {
 

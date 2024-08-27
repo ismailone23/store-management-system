@@ -10,6 +10,7 @@ export default function Input({
     value,
     required,
     readOnly,
+    autoFocus,
     onChange,
     dval,
 }: {
@@ -19,6 +20,7 @@ export default function Input({
     name: string;
     placeholder: string;
     readOnly?: boolean;
+    autoFocus?: boolean;
     dval?: string | number;
     value?: string | number;
     required?: boolean;
@@ -27,7 +29,8 @@ export default function Input({
     return (
         <div className='flex flex-col w-full'>
             <label className="text-[0.9rem]" htmlFor={name}>{title}</label>
-            <input defaultValue={value} autoComplete='off'
+            <input autoFocus={autoFocus} defaultValue={value}
+                autoComplete='off'
                 required={required}
                 onChange={onChange}
                 readOnly={readOnly}

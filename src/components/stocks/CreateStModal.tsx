@@ -5,15 +5,18 @@ import Button from '@/components/shared/Button'
 import Input from '@/components/shared/Input'
 import Image from 'next/image';
 import useMessage from '@/context/useMessage';
+import { handleSubmit } from '@/lib/stockaction';
+import { useSession } from 'next-auth/react';
+import { createproductapitype } from '../type';
 
 export default function CreateStModal({
     setIsModalOpen,
-    handleSubmit,
-    formRef
+    formRef,
+    createproductapi
 }: {
     setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-    handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
     formRef: MutableRefObject<HTMLFormElement | null>;
+    createproductapi: createproductapitype
 }) {
     const [image, setImage] = useState<string | null>(null)
     function handleFile(e: ChangeEvent<HTMLInputElement>) {
@@ -22,14 +25,15 @@ export default function CreateStModal({
         }
         setImage(null)
     }
-    const { isLoading } = useMessage()
+    const { data: session } = useSession()
+    const { isLoading, setIsLoading, setMessage } = useMessage()
 
     return (
         <div className='absolute top-0 flex p-2 left-0 w-full overflow-hidden h-full bg-black/35'>
             <div className='w-full h-full flex justify-center md:items-center'>
                 <div className='relative max-w-[400px] h-auto overflow-y-auto no-scrollbar w-full gap-2 text-sm flex flex-col rounded bg-white p-4'>
                     <h1 className='w-full text-center text-base'>Create New Product</h1>
-                    <form ref={formRef} onSubmit={(e) => handleSubmit(e)} className='w-full flex flex-col gap-1'>
+                    <form ref={formRef} onSubmit={(e) => handleSubmit(e, setMessage, setIsLoading, formRef, session, createproductapi)} className='w-full flex flex-col gap-1'>
                         <Input required title='Product Name' type='text' name='productname' placeholder='01FF' />
                         <Input title='Purchased Price' type='number' name='purchasedprice' placeholder='0.00' />
                         <Input title='MRP' type='number' name='mrp' placeholder='0.00' />

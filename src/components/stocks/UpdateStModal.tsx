@@ -6,19 +6,25 @@ import Input from '../shared/Input'
 import Image from 'next/image';
 import { productsjointype } from '@/types';
 import useMessage from '@/context/useMessage';
+import { handleUpdate } from '@/lib/stockaction';
+import { useSession } from 'next-auth/react';
+import { productupdateapitype } from '../type';
 
 export default function UpdateStModal({
     setIsUpModalOpen,
-    handleUpdate,
     upformRef,
-    product
+    product,
+    isUpModelOpen,
+    productupdateapi
 }: {
     setIsUpModalOpen: Dispatch<SetStateAction<{ open: boolean; id: string }>>;
-    handleUpdate: (e: FormEvent<HTMLFormElement>, type: 'update' | 'delete') => Promise<void>;
     upformRef: MutableRefObject<HTMLFormElement | null>;
-    product: productsjointype
+    product: productsjointype,
+    isUpModelOpen: { open: boolean; id: string }
+    productupdateapi: productupdateapitype
 }) {
-    const { isLoading } = useMessage()
+    const { data: session } = useSession()
+    const { isLoading, setMessage, setIsLoading } = useMessage()
     const [image, setImage] = useState<string | null>(null)
     function handleFile(e: ChangeEvent<HTMLInputElement>) {
         if (e.target.files && e.target.files.length > 0) {
@@ -32,7 +38,7 @@ export default function UpdateStModal({
             <div className='w-full h-full flex justify-center md:items-center'>
                 <div className='relative max-w-[450px] h-auto overflow-y-auto no-scrollbar w-full gap-2 text-sm flex flex-col rounded bg-white p-4'>
                     <h1 className='w-full text-center text-base'>Create New Product</h1>
-                    <form ref={upformRef} onSubmit={(e) => handleUpdate(e, 'update')} className='w-full flex flex-col gap-1'>
+                    <form ref={upformRef} onSubmit={(e) => handleUpdate(e, setMessage, setIsLoading, upformRef, session, isUpModelOpen, productupdateapi)} className='w-full flex flex-col gap-1'>
                         <Input value={product.products.productname} required title='Product Name' type='text' name='productname' placeholder='01FF' />
                         <Input value={product.prices.purchasedprice} title='Purchased Price' type='number' name='purchasedprice' placeholder='0.00' />
                         <Input value={product.prices.mrp} title='MRP' type='number' name='mrp' placeholder='0.00' />

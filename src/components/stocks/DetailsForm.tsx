@@ -19,7 +19,7 @@ export default function DetailsForm({
 
     return (
         <div className='absolute bg-black/35 left-0 overflow-hidden top-0 w-full h-full items-center flex justify-center p-2'>
-            <div className='max-w-[450px] gap-2 w-full flex flex-col text-sm no-scrollbar h-4/5 overflow-y-auto rounded bg-white p-2'>
+            <div className='max-w-[450px] gap-2 w-full flex flex-col text-sm no-scrollbar max-h-full overflow-y-auto rounded bg-white p-2'>
                 <h1 className='text-base w-full text-center'>Details</h1>
                 <div className='flex flex-col gap-1 w-full'>
                     <h1>{joint.products.productname}</h1>
@@ -35,12 +35,12 @@ export default function DetailsForm({
                             )
                         }
                     </div>
-                    <div className='w-full h-56'>
+                    <div className='w-full h-60'>
                         {
                             joint.products.image === 'no image' ?
-                                <Image priority src={'/static/nophoto.jpeg'} alt='product image' className='w-full rounded h-full object-cover' width='0' height='0' sizes='100vw' />
+                                <Image priority src={'/static/nophoto.jpeg'} alt='product image' className='w-full rounded h-full object-contain' width='0' height='0' sizes='100vw' />
                                 :
-                                <Image priority src={joint.products.image} alt='product image' className='w-full h-full rounded object-cover' width='0' height='0' sizes='100vw' />
+                                <Image priority src={joint.products.image} alt='product image' className='w-full h-full rounded object-contain' width='0' height='0' sizes='100vw' />
                         }
                     </div>
                 </div>

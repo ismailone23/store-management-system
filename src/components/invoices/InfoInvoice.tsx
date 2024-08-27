@@ -33,8 +33,8 @@ export default function InfoInvoice({
     })
     return (
         <div className='absolute top-0 flex p-2 left-0 w-full overflow-hidden h-full bg-black/35'>
-            <div className='w-full h-full flex justify-center md:items-center'>
-                <div className='h-auto no-scrollbar w-full flex max-w-[900px] sm:justify-center'>
+            <div className='w-full max-h-full flex items-center justify-center'>
+                <div className='max-h-full no-scrollbar w-full flex max-w-[900px] sm:justify-center'>
                     <div className='w-full text-sm gap-2 flex flex-col rounded bg-white'>
                         <div className="flex flex-col overflow-x-auto no-scrollbar w-full p-4 gap-1" ref={inforref}>
                             <div className='flex flex-col gap-1'>
@@ -45,7 +45,6 @@ export default function InfoInvoice({
                             <div className='flex w-full'>
                                 <table className='border min-w-[840px] w-full items-center'>
                                     <thead>
-
                                         <tr className=''>
                                             <td className='border-r text-center' >Sl.no</td>
                                             <td className='border-r text-center col-span-2' >Product Name</td>

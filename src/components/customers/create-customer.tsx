@@ -20,7 +20,7 @@ export default function CreateCustomer({
                 <div className='relative max-w-[400px] h-auto overflow-y-auto no-scrollbar w-full gap-2 text-sm flex flex-col rounded bg-white p-4'>
                     <h1 className='w-full text-center text-base'>Create New Customer</h1>
                     <form ref={formRef} onSubmit={handleSubmit} className="flex w-full flex-col gap-1">
-                        <Input name='name' placeholder='John' title='Name' type='text' />
+                        <Input autoFocus name='name' placeholder='John' title='Name' type='text' />
                         <Input name='number' placeholder='01*********' title='Contact' type='number' />
                         <div className='flex w-full gap-1 mt-2 items-center justify-end'>
                             <Button onClick={() => setIsOpen(false)} type='button'

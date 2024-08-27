@@ -8,11 +8,12 @@ import useMessage from '@/context/useMessage'
 import { api } from '@/trpc/client'
 import { invoiceformtype, purchasedlist } from '@/types'
 import { useSession } from 'next-auth/react'
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import React, { FormEvent, useMemo, useRef, useState } from 'react'
 
 export default function Page() {
     const [isOpen, setIsOpen] = useState(false)
-    const [date, setDate] = useState<{ from: string, to: string }>({ from: '', to: '' })
+    const daten = useMemo(() => { return new Date(Date.now()) }, [])
+    const [date, setDate] = useState<{ from: Date, to: Date }>({ from: daten, to: daten })
     const formRef = useRef<HTMLFormElement>(null)
     const { setIsLoading, setMessage } = useMessage();
     const [isMoreOpen, setIsMoreOpen] = useState(false)
@@ -60,10 +61,8 @@ export default function Page() {
             purchasedlist: list
         })
     }
-    useEffect(() => {
-        const datemaker = (date: string) => new Date(date)
-        console.log({ from: datemaker(date.from), to: datemaker(date.to) });
-    }, [date])
+    console.log(date);
+
     return (
         <>
             <Metadata seoTitle='Invoices | SuperFaster' />

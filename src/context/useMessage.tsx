@@ -1,7 +1,7 @@
 'use client'
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useReducer, useState } from 'react'
 
-type messageType = {
+export type messageType = {
     error: boolean;
     text: string;
 } | null

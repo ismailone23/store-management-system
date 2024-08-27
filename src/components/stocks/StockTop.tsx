@@ -1,25 +1,29 @@
 'use client'
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import SmButton from '@/components/shared/SmButton'
 
 export default function StockTop
     ({
         setIsModalOpen,
-        searchText,
         setSearchText
     }: {
         setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-        searchText: string;
         setSearchText: Dispatch<SetStateAction<string>>
     }) {
+    const [sText, setSText] = useState<string>('')
+
+    useEffect(() => {
+        const timeOutId = setTimeout(() => setSearchText(sText), 700);
+        return () => clearTimeout(timeOutId);
+    }, [sText, setSearchText]);
+
     return (
         <div className='w-full sm:text-sm text-xs gap-2 flex justify-between items-center'>
             <div className="w-auto flex-1 relative">
                 <MagnifyingGlassIcon className='absolute w-4 text-gray-700 sm:top-2 top-[0.4rem] sm:left-[0.4rem] left-[0.35rem]' />
                 <input
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
+                    onChange={(e) => setSText(e.target.value)}
                     type="text"
                     name="search"
                     placeholder='search product with name'

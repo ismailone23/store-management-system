@@ -13,7 +13,7 @@ export default function Navbar() {
             <div className='sm:flex lg:max-w-48 md:max-w-44 sm:max-w-40 w-full sm:border-r h-full flex'>
                 <Link href={'/dashboard'} className='sm:pl-3'>
                     <Image priority
-                        className='w-[6rem] h-[3rem] filter'
+                        className='w-[6rem] h-[3.28rem] filter'
                         quality={100}
                         src={'/static/logo.png'}
                         width="0"

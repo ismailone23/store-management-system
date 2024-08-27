@@ -1,8 +1,46 @@
 DO $$ BEGIN
+ CREATE TYPE "public"."payment_type" AS ENUM('CASH', 'ONLINE', 'PENDING');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "public"."user_role" AS ENUM('ADMIN', 'BASIC', 'OWNER');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "customers" (
+	"dealer_id" serial PRIMARY KEY NOT NULL,
+	"name" varchar NOT NULL,
+	"number" varchar NOT NULL,
+	"t_debit" real DEFAULT 0 NOT NULL,
+	"t_credit" real DEFAULT 0 NOT NULL,
+	"history" varchar NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "customers_dealer_id_unique" UNIQUE("dealer_id"),
+	CONSTRAINT "customers_number_unique" UNIQUE("number")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "invoice_pricelist" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"invoice_id" uuid NOT NULL,
+	"mrp" real DEFAULT 0 NOT NULL,
+	"t_bill" real DEFAULT 0 NOT NULL,
+	"ex_discount" real DEFAULT 0 NOT NULL,
+	"tax" real DEFAULT 0 NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "invoices" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"dealer_id" serial NOT NULL,
+	"purchased_list" varchar NOT NULL,
+	"created_by" varchar NOT NULL,
+	"payment_method" "payment_type" DEFAULT 'PENDING' NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "prices" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -72,6 +110,18 @@ CREATE TABLE IF NOT EXISTS "session" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "invoice_pricelist" ADD CONSTRAINT "invoice_pricelist_invoice_id_invoices_id_fk" FOREIGN KEY ("invoice_id") REFERENCES "public"."invoices"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "invoices" ADD CONSTRAINT "invoices_dealer_id_customers_dealer_id_fk" FOREIGN KEY ("dealer_id") REFERENCES "public"."customers"("dealer_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "prices" ADD CONSTRAINT "prices_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -95,5 +145,6 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "tableindex" ON "customers" USING btree ("dealer_id","number");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "product_index" ON "products" USING btree ("id");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "email_index" ON "users" USING btree ("email","id");
