@@ -76,9 +76,9 @@ export default function InfoInvoice({
                             </div>
                         </div>
                         <div className='flex w-full justify-end gap-1 pb-4 pr-4'>
-                            <button className='px-2 py-1 bg-blue-500 text-white rounded-sm outline-none' onClick={() => setIsMoreOpen(false)}>Close</button>
-                            <button onClick={() => setIsCustomerCopy(!isCustomerCopy)} className='px-2 py-1 bg-gray-700 text-white rounded-sm outline-none'>Show {isCustomerCopy ? 'Shop' : 'Customer'} Copy</button>
-                            <button onClick={() => handlePrint()} className='border px-2 py-1 rounded outline-none'>Print</button>
+                            <button onClick={() => handlePrint()} className='px-2 py-1 bg-blue-500 text-white rounded-sm outline-none'>Print</button>
+                            <button onClick={() => setIsCustomerCopy(!isCustomerCopy)} className='border px-2 py-1 text-gray-700 rounded-sm outline-none'>Show {isCustomerCopy ? 'Shop' : 'Customer'} Copy</button>
+                            <button className='px-2 py-1 bg-gray-700 text-white rounded-sm outline-none' onClick={() => setIsMoreOpen(false)}>Close</button>
                         </div>
                     </div>
                 </div>
