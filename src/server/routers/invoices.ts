@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "@/trpc/trpc";
 import { z } from "zod";
 import { CustomerTable, InvoicePricelist, InvoicesTable, StocksTable } from "../schema";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, gt, lt, or } from "drizzle-orm";
 import { customerhistory } from "@/types";
 
 export const invoiceRouter = createTRPCRouter({
@@ -38,7 +38,20 @@ export const invoiceRouter = createTRPCRouter({
         return [...inovoiceid, ...invoiceprice]
     }),
     getInvoices: protectedProcedure.query(async ({ ctx: { db } }) => {
-        return await db.select().from(InvoicesTable).innerJoin(InvoicePricelist, eq(InvoicePricelist.invoiceid, InvoicesTable.id))
+        return await db.select().from(InvoicesTable)
+            .innerJoin(InvoicePricelist, eq(InvoicePricelist.invoiceid, InvoicesTable.id))
             .orderBy(desc(InvoicesTable.createdat))
+    }),
+    searchInvoice: protectedProcedure.input(z.object({ from: z.date(), to: z.date() })).mutation(async ({ ctx: { db }, input: { from, to } }) => {
+        if (from.getDate() > to.getDate()) {
+            throw new Error('Invalid Search parameter.')
+        } else if (from.getDate() < to.getDate()) {
+            return await db.select().from(InvoicesTable).where(and(gt(InvoicesTable.createdat, from), lt(InvoicesTable.createdat, to)))
+                .innerJoin(InvoicePricelist, eq(InvoicePricelist.invoiceid, InvoicesTable.id))
+        } else {
+            return await db.select().from(InvoicesTable)
+                .innerJoin(InvoicePricelist, eq(InvoicePricelist.invoiceid, InvoicesTable.id))
+                .orderBy(desc(InvoicesTable.createdat))
+        }
     })
 })

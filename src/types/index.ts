@@ -54,3 +54,6 @@ export type invoicetype = {
     invoices: Invoicestype,
     invoice_pricelist: InvoicePricelistType
 }
+export interface dcustomerhistory extends customerhistory {
+    dealerid: number
+}

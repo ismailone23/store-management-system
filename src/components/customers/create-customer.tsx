@@ -16,7 +16,7 @@ export default function CreateCustomer({
     const { isLoading } = useMessage()
     return (
         <div className='absolute top-0 flex p-2 left-0 w-full overflow-hidden h-full bg-black/35'>
-            <div className='w-full h-full flex justify-center md:items-center'>
+            <div className='w-full max-h-full flex justify-center items-center'>
                 <div className='relative max-w-[400px] h-auto overflow-y-auto no-scrollbar w-full gap-2 text-sm flex flex-col rounded bg-white p-4'>
                     <h1 className='w-full text-center text-base'>Create New Customer</h1>
                     <form ref={formRef} onSubmit={handleSubmit} className="flex w-full flex-col gap-1">

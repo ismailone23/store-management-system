@@ -9,7 +9,7 @@ export default function Navbar() {
     const path = usePathname()
     const session = useSession();
     return (
-        <div className='flex justify-between w-full items-center sm:px-0 px-1 h-12 border-b'>
+        <div className='flex justify-between w-full items-center sm:px-0 px-1 h-[3.28rem] border-b'>
             <div className='sm:flex lg:max-w-48 md:max-w-44 sm:max-w-40 w-full sm:border-r h-full flex'>
                 <Link href={'/dashboard'} className='sm:pl-3'>
                     <Image priority

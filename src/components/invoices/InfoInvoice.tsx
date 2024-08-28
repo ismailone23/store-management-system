@@ -40,7 +40,7 @@ export default function InfoInvoice({
                             <div className='flex flex-col gap-1'>
                                 <h1>Created By : {invoice.invoices.createdby}</h1>
                                 <h1>Dealer Id : {invoice.invoices.dealerid}</h1>
-                                <h1>Date : {new Date(invoice.invoices.createdat).getDate()}-{new Date(invoice.invoices.createdat).getMonth() + 1}-{new Date(invoice.invoices.createdat).getFullYear()}</h1>
+                                <h1>Date : {new Date(invoice.invoices.createdat).getDate()}/{new Date(invoice.invoices.createdat).getMonth() + 1}/{new Date(invoice.invoices.createdat).getFullYear()}</h1>
                             </div>
                             <div className='flex w-full'>
                                 <table className='border min-w-[840px] w-full items-center'>
@@ -76,9 +76,9 @@ export default function InfoInvoice({
                             </div>
                         </div>
                         <div className='flex w-full justify-end gap-1 pb-4 pr-4'>
-                            <button onClick={() => handlePrint()} className='px-2 py-1 bg-blue-500 text-white rounded-sm outline-none'>Print</button>
                             <button onClick={() => setIsCustomerCopy(!isCustomerCopy)} className='border px-2 py-1 text-gray-700 rounded-sm outline-none'>Show {isCustomerCopy ? 'Shop' : 'Customer'} Copy</button>
                             <button className='px-2 py-1 bg-gray-700 text-white rounded-sm outline-none' onClick={() => setIsMoreOpen(false)}>Close</button>
+                            <button onClick={() => handlePrint()} className='px-2 py-1 bg-blue-500 text-white rounded-sm outline-none'>Print</button>
                         </div>
                     </div>
                 </div>

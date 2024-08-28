@@ -6,9 +6,10 @@ import DateFilter from '@/components/shared/DateFilter'
 import Metadata from '@/components/shared/Metadata'
 import useMessage from '@/context/useMessage'
 import { api } from '@/trpc/client'
-import { invoiceformtype, purchasedlist } from '@/types'
+import { invoiceformtype, invoicetype, purchasedlist } from '@/types'
 import { useSession } from 'next-auth/react'
 import React, { FormEvent, useMemo, useRef, useState } from 'react'
+import Loading from '@/app/dashboard/stocks/loading'
 
 export default function Page() {
     const [isOpen, setIsOpen] = useState(false)
@@ -21,10 +22,7 @@ export default function Page() {
     const invoiceapi = api.invoiceRoute.getInvoices.useQuery()
 
     const { isFetching, isError, data } = invoiceapi
-    const catchedMutateData = useMemo(() => {
-        if (isError || isFetching) return null
-        return data
-    }, [isFetching, data, isError]);
+
 
     const createinvoiceapi = api.invoiceRoute.createInvoice.useMutation({
         onSuccess: () => {
@@ -39,6 +37,23 @@ export default function Page() {
             setMessage({ error: true, text: message })
         }
     });
+    const searchinvoiceapi = api.invoiceRoute.searchInvoice.useMutation({
+        onSuccess: () => {
+            setIsLoading(false)
+            setIsOpen(false)
+        },
+        onError: ({ message }) => {
+            setIsLoading(false)
+            setMessage({ error: true, text: message })
+        }
+    });
+    const { data: sdata, isError: isErrorS } = searchinvoiceapi
+
+    const catchedMutateData = useMemo(() => {
+        if (isError || isFetching) return null
+        if (sdata) return sdata
+        return data
+    }, [isFetching, data, isError, sdata]);
 
     const session = useSession();
     const handleSubmit = async (e: FormEvent<HTMLFormElement>, list: purchasedlist[]) => {
@@ -61,15 +76,16 @@ export default function Page() {
             purchasedlist: list
         })
     }
-    console.log(date);
-
+    function handleSearch() {
+        searchinvoiceapi.mutate({ from: date.from, to: date.to })
+    }
     return (
         <>
             <Metadata seoTitle='Invoices | SuperFaster' />
             <div className='w-full flex flex-col'>
-                <DateFilter date={date} setDate={setDate} setIsOpen={setIsOpen} />
+                <DateFilter handleSearch={handleSearch} date={date} setDate={setDate} setIsOpen={setIsOpen} />
                 <div className='flex flex-col no-scrollbar sm:px-2 overflow-auto text-sm'>
-                    {catchedMutateData && <DisplayInvoices setId={setId} setIsMoreOpen={setIsMoreOpen} invoices={catchedMutateData} />}
+                    {isFetching ? <Loading /> : catchedMutateData && <DisplayInvoices setId={setId} setIsMoreOpen={setIsMoreOpen} invoices={catchedMutateData} />}
                 </div>
             </div>
             {

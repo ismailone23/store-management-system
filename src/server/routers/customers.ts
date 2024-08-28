@@ -24,7 +24,7 @@ export const customerRouter = createTRPCRouter({
             return newCs
         }),
     getCustomers: protectedProcedure.query(async ({ ctx: { db } }) => {
-        return await db.select().from(CustomerTable).orderBy(desc(CustomerTable.totaldebit))
+        return await db.select().from(CustomerTable).orderBy(desc(CustomerTable.createdat))
     }),
     updateCustomer: protectedProcedure.input(z.object({
         dealerid: z.number(),
